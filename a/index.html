@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#FFFFFF">
+    <title>iron nuts</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='a.css') }}">
+    <script defer type="text/javascript" src="{{ url_for('static', filename='a.js') }}"></script>
+</head>
+<body>
+
+<div id="div">
+    I'm the world...<br>
+    before that...<br>
+    I'm not <span id="not">juan...</span><br>
+</div>
+
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(
+                '{{ url_for("static", filename="service-worker.js") }}'
+            );
+        }
+    </script>
+
+    <div id="boton1">
+        caja
+    </div>
+    <div id="boton">
+        app tonta
+    </div>
+
+    omae...
+    <div id="log"></div>
+
+</body>
+</html>
