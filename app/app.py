@@ -18,13 +18,13 @@ def go_default(error):
      return 'notmyproblem .!.', 404
 
 
-@app.route('/')
-def home(): return render_template('index.html')
-
-
 @app.route('/servise-worker.js')
 def sw():
      return app.send_static_file('servise-worker.js')
+
+
+@app.route('/')
+def home(): return render_template('index.html')
 
 
 @app.route('/api/', methods=['POST', 'GET'])#, 'PUT', 'DELETE'])
@@ -48,10 +48,13 @@ def api():
 
 
 if __name__ == '__main__':
-     # host = '192.168.100.2'
-     host = 'localhost'
-     # host = '127.0.0.1'
-     # app.run(debug=True, port=7896, host=host)
-     serve(app, host='*', port=7896)
+     import sys
+     if sys.argv[1] == 'dev':
+          # host = '192.168.100.2'
+          host = 'localhost'
+          # host = '127.0.0.1'
+          app.run(debug=True, port=7777, host=host)
+     else:
+          serve(app, host='*', port=6669)
 
 #ned

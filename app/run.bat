@@ -1,1 +1,2 @@
-dist\temp\Scripts\python.exe app.py
+dist\temp\Scripts\python.exe app.py dev
+::dist\temp\Scripts\python.exe app.py
