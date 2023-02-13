@@ -3,7 +3,9 @@ from flask import (
      Flask, request, render_template,
      url_for, redirect, jsonify,
 )
-from waitress import serve
+from flask_socketio import SocketIO, send
+from sys import argv
+
 
 app = Flask(
      __name__,
@@ -11,6 +13,19 @@ app = Flask(
      static_folder='a',
      template_folder='a'
 )
+
+app.config['SECRET_KEY'] = 'nigga'
+
+if argv[1] == 'dev':
+     socketio = SocketIO(
+          app,
+          logger=True,
+          async_mode=None,
+          ping_interval=45,
+          engineio_logger=True
+     )
+else:
+     socketio = SocketIO(app)
 
 
 @app.errorhandler(404)
@@ -47,14 +62,28 @@ def api():
      return jsonify('op')
 
 
+pepa = 0
+
+@socketio.event
+def jamon(mensaje):
+     print(f'\n\n{mensaje} AAAAAAAAAAA\n\n')
+     global pepa
+     pepa += 1
+     print(pepa)
+     return ('amo a angeles <3' if pepa == 33 else pepa)
+
+
 if __name__ == '__main__':
-     import sys
-     if sys.argv[1] == 'dev':
-          # host = '192.168.100.2'
-          host = 'localhost'
-          # host = '127.0.0.1'
-          app.run(debug=True, port=7777, host=host)
+     if argv[1] == 'dev':
+          print('running on', argv[1])
+          socketio.run(
+               app,
+               host='0.0.0.0',
+               port=7777,
+               debug=True
+          )
      else:
-          serve(app, host='*', port=6669)
+          print('running on', argv[1])
+          socketio.run(app, host='0.0.0.0', port=7777)
 
 #ned
