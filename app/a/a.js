@@ -17,10 +17,7 @@ nani.onclick = () => {
 
 boton.onclick = () => prompt();
 
-const local_IP = 'pd01.loca.lt';
-// const local_IP = '192.168.100.2';
-// const local_IP = 'localhost';
-// const local_IP = '127.0.0.1';
+const local_IP = 'teikat.site';
 const PORT = '7896';
 
 function api_shortcut(method, action) {

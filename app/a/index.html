@@ -55,7 +55,7 @@
         <div class="col">
             <div id="version">
                 <span>Version:</span>
-                <span id="version">a</span>
+                <span id="version">0.0.0</span>
             </div>
             <div class="invisible" id="status">
                 <span>Server status:</span>
@@ -98,10 +98,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>pete</td>
-                <td>pete</td>
-                <td>pete</td>
-                <td>pete</td>
+                <td>text</td>
+                <td>text</td>
+                <td>text</td>
+                <td>text</td>
                 <td>
                     <select class="form-select">
                         <option></option>
@@ -110,7 +110,7 @@
                         <option>Three</option>
                     </select>
                 </td>
-                <td>pete</td>
+                <td>text</td>
             </tr>
         </tbody>
     </table>
@@ -141,10 +141,10 @@
     const actual = dd.querySelector('#actual');
 
     socket.on('disconnect', () => {
-        console.log('no hay')
+        console.log('no hay');
     })
     socket.on('connect', () => {
-        console.log('SI HAY')
+        console.log('SI HAY');
     })
 
     jala.onclick = () => {
@@ -155,6 +155,77 @@
     }
 </script>
 <!--  -->
+
+<br>
+<div class="container text-center">
+    <div class="row">
+        <div class="col"><span class="c-angeles">0</span><button class="b-angeles">angeles</button></div>
+        <div class="col"><span class="c-pato">0</span><button class="b-pato">pato</button></div>
+        <div class="col"><span class="c-elfo">0</span><button class="b-elfo">elfo</button></div>
+        <div class="col"><span class="c-desk">0</span><button class="b-desk">desk</button></div>
+    </div>
+    <div class="row">
+        <div class="col" id="elnazi">asdf</div>
+    </div>
+</div>
+<script type="text/javascript">
+    const b_angeles = dd.querySelector('.b-angeles');
+    const b_pato = dd.querySelector('.b-pato');
+    const b_elfo = dd.querySelector('.b-elfo');
+    const b_desk = dd.querySelector('.b-desk');
+    
+    const c_angeles = dd.querySelector('.c-angeles');
+    const c_pato = dd.querySelector('.c-pato');
+    const c_elfo = dd.querySelector('.c-elfo');
+    const c_desk = dd.querySelector('.c-desk');
+
+    const boss = dd.querySelector('#elnazi');
+
+    b_angeles.onclick = () => {
+        if (boss.innerHTML !== 'JUEGO TERMINADO') {
+            socket.emit(
+                'testeo',
+                [b_angeles.innerHTML, parseInt(c_angeles.innerHTML)]
+            );
+        }
+    }
+    b_pato.onclick = () => {
+        if (boss.innerHTML !== 'JUEGO TERMINADO') {
+            socket.emit(
+                'testeo',
+                [b_pato.innerHTML, parseInt(c_pato.innerHTML)]
+            );
+        }
+    }
+    b_elfo.onclick = () => {
+        if (boss.innerHTML !== 'JUEGO TERMINADO') {
+            socket.emit(
+                'testeo',
+                [b_elfo.innerHTML, parseInt(c_elfo.innerHTML)]
+            );
+        }
+    }
+    b_desk.onclick = () => {
+        if (boss.innerHTML !== 'JUEGO TERMINADO') {
+            socket.emit(
+                'testeo',
+                [b_desk.innerHTML, parseInt(c_desk.innerHTML)]
+            );
+        }
+    }
+    socket.on('testeo', (a) => {
+        // console.log(a);
+        dd.querySelector('.c-' + a[0]).innerHTML = a[1]
+        boss.innerHTML = parseInt(c_angeles.innerHTML)
+                       + parseInt(c_pato.innerHTML)
+                       + parseInt(c_elfo.innerHTML)
+                       + parseInt(c_desk.innerHTML);
+        if (boss.innerHTML === '33') {
+            boss.innerHTML = 'JUEGO TERMINADO';
+        }
+    })
+
+</script>
 
 </body>
 </html>

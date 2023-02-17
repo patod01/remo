@@ -3,7 +3,7 @@ from flask import (
      Flask, request, render_template,
      url_for, redirect, jsonify,
 )
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, emit
 from sys import argv
 
 
@@ -62,15 +62,12 @@ def api():
      return jsonify('op')
 
 
-pepa = 0
-
 @socketio.event
-def jamon(mensaje):
-     print(f'\n\n{mensaje} AAAAAAAAAAA\n\n')
-     global pepa
-     pepa += 1
-     print(pepa)
-     return ('amo a angeles <3' if pepa == 33 else pepa)
+def testeo(msg):
+     print(type(msg), msg, type(msg[1]))
+     response = [msg[0], msg[1] + 1 if msg[1] != 69 else 'amo a angeles <3']
+     print(response)
+     emit('testeo', response, broadcast=True)
 
 
 if __name__ == '__main__':
@@ -84,6 +81,6 @@ if __name__ == '__main__':
           )
      else:
           print('running on', argv[1])
-          socketio.run(app, host='0.0.0.0', port=7777)
+          socketio.run(app, host='0.0.0.0', port=10123)
 
 #ned
