@@ -3,9 +3,11 @@ from flask import (
      Flask, request, render_template,
      url_for, redirect, jsonify,
 )
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, emit
 from sys import argv
+import sqlite3
 
+con = sqlite3.connect('remo.db')
 
 app = Flask(
      __name__,
@@ -21,11 +23,11 @@ if argv[1] == 'dev':
           app,
           logger=True,
           async_mode=None,
-          ping_interval=45,
+          ping_interval=50,
           engineio_logger=True
      )
 else:
-     socketio = SocketIO(app)
+     socketio = SocketIO(app, ping_interval=50)
 
 
 @app.errorhandler(404)
@@ -39,7 +41,22 @@ def sw():
 
 
 @app.route('/')
-def home(): return render_template('index.html')
+def home():
+     with con:
+          lista = []
+          query = con.execute("SELECT nombre FROM v_list")
+          lista = [row[0] for row in query]
+
+          counters = []
+          query = con.execute("SELECT * FROM v_counter")
+          counters = [row[1] for row in query]
+          c_total = counters[1]
+          c_busy = c_total - counters[0]
+
+          remotos = []
+          query = con.execute("SELECT * FROM v_remotos")
+          remotos = [row for row in query]
+     return render_template('index.html', lista=lista, busy=c_busy, total=c_total, remotos=remotos)
 
 
 @app.route('/api/', methods=['POST', 'GET'])#, 'PUT', 'DELETE'])
@@ -65,9 +82,57 @@ def api():
 @socketio.event
 def testeo(msg):
      print(type(msg), msg, type(msg[1]))
-     response = [msg[0], msg[1] + 1 if msg[1] != 69 else 'amo a angeles <3']
+     response = [
+          msg[0], msg[1] + 1 if msg[1] != 69 else 'amo a angeles <3'
+     ]
      print(response)
      emit('testeo', response, broadcast=True)
+
+
+@socketio.event
+def change_item(msg):
+     print(msg, type(msg))
+     with con:
+          persona = []
+          query = con.execute(
+               "SELECT * FROM v_list where nombre = ?",
+               (msg[1],)
+          )
+
+     persona = [row for row in query]
+
+     if persona:
+          query = con.execute(
+               "UPDATE remotos SET list_view_id = ? WHERE [index] = ?",
+               (persona[0][0], int(msg[0].split('-')[-1]))
+          )
+          answer = [msg[0].split('-')[-1]] + list(persona[0][1:])
+     else:
+          query = con.execute(
+               "UPDATE remotos SET list_view_id = 'u00' WHERE [index] = ?",
+               (int(msg[0].split('-')[-1]),)
+          )
+          answer = [msg[0].split('-')[-1], '', 'libre']
+
+     with con:
+          query = con.execute(
+               "INSERT INTO historial (list_view_ID, time) VALUES (?, ?)",
+               (persona[0][0], round(time.time()))
+          )
+
+     with con:
+          counters = []
+          query = con.execute("SELECT * FROM v_counter")
+          counters = [row[1] for row in query]
+          c_total = counters[1]
+          c_busy = c_total - counters[0]
+
+     answer += [c_busy] + [c_total]
+
+     print('enviando:', answer)
+
+     emit('change_item', answer, broadcast=True)
+     return answer
 
 
 if __name__ == '__main__':
@@ -76,7 +141,7 @@ if __name__ == '__main__':
           socketio.run(
                app,
                host='0.0.0.0',
-               port=7777,
+               port=10123,
                debug=True
           )
      else:

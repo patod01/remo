@@ -1,230 +1,248 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+   <!-- setup -->
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="theme-color" content="#FFFFFF">
+   <title>Remo</title>
+   <link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}">
+   <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+   <script type="text/javascript">
+      if ('serviceWorker' in navigator) {
+         navigator.serviceWorker.register(
+            '{{ url_for("static", filename="service-worker.js") }}'
+         );
+      }
+   </script>
 
-    <!-- setup -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#FFFFFF">
-    <title>Remo</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <script type="text/javascript">
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(
-                '{{ url_for("static", filename="service-worker.js") }}'
-            );
-        }
-    </script>
+   <!-- p -->
+   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='a.css') }}">
+   <script defer type="text/javascript" src="{{ url_for('static', filename='a.js') }}"></script>
 
-    <!-- p -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='a.css') }}">
-    <script defer type="text/javascript" src="{{ url_for('static', filename='a.js') }}"></script>
+   <!-- bootstrap -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
-    <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-
-    <!-- SocketIO -->
-    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+   <!-- SocketIO -->
+   <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <!-- jokes -->
 <div class="juanerio d-none">
-    <div id="div">
-        I'm the world...<br>
-        before that...<br>
-        I'm not <span id="not">juan...</span><br>
-    </div>
-    <div id="boton1">
-        caja
-    </div>
-    <div id="boton">
-        app tonta
-    </div>
-    omae...
-    <div id="log"></div>
-    <br>
+   <div id="div">
+      I'm the world...<br>
+      before that...<br>
+      I'm not <span id="not">juan...</span><br>
+   </div>
+   <div id="boton1">
+      caja
+   </div>
+   <div id="boton">
+      app tonta
+   </div>
+   omae...
+   <div id="log"></div>
+   <br>
 </div>
 <!-- jokes everywhere -->
 
 
 <div class="container" id="information">
-    <div class="row">
-        <div class="col">
-            <div id="version">
-                <span>Version:</span>
-                <span id="version">0.0.0</span>
-            </div>
-            <div class="invisible" id="status">
-                <span>Server status:</span>
-                <span id="status">b</span>
-            </div>
-        </div>
+   <div class="row">
+      <div class="col">
+         <div id="version">
+            <span>Version:</span>
+            <span id="version">0.1.0</span>
+         </div>
+         <div class="invisible" id="status">
+            <span>Server status:</span>
+            <span id="status">b</span>
+         </div>
+      </div>
 
-        <div class="col text-center" class="grafico">
-            <div class="h3">Remotos Ocupados</div>
-            <div class="h4 counter">3/4</div>
-            <div class="graph">
-                <div class="progress" style="height: 33px;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%; background-color: rgba(232, 133, 0, 1);"></div>
-                </div>
+      <div class="col text-center" class="grafico">
+         <div class="h3">Remotos Ocupados</div>
+         <div class="h4 counter">{{busy}}/{{total}}</div>
+         <div class="graph">
+            <div class="progress" style="height: 33px;">
+               <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: {{busy/total*100}}%; background-color: rgba(232, 133, 0, 1);"></div>
             </div>
-        </div>
+         </div>
+      </div>
 
-        <div class="invisible col text-end" id="users">
-            <span>Usuarios online:</span>
-            <span id="status">c</span>
-        </div>
-    </div>
+      <div class="invisible col text-end" id="users">
+         <span>Usuarios online:</span>
+         <span id="status">c</span>
+      </div>
+   </div>
 </div>
 
 
 <br>
 
 
+<!-- Tabla -->
 <div class="container" id="listado">
-    <table class="table table-hover table-bordered" style="vertical-align: middle;">
-        <thead class="table-light">
+   <table class="table table-hover table-bordered text-center">
+      <thead class="table-light" style="vertical-align: middle;">
+         <tr>
+            <th>Numero</th>
+            <th>Remoto</th>
+            <th>IP</th>
+            <th>Uso</th>
+            <th style="max-width: 6.9em;">Usuario Activo</th>
+            <th>Status</th>
+         </tr>
+      </thead>
+      <tbody style="vertical-align: middle;">
+         {% for remoto in remotos %}
             <tr>
-                <th>Numero</th>
-                <th>Remoto</th>
-                <th>IP</th>
-                <th>Uso</th>
-                <th>Usuario Activo</th>
-                <th>Status</th>
+               <td class="py-0">{{remoto[0]}}</td>
+               <td class="py-0">{{remoto[1]}}</td>
+               <td class="py-0">{{remoto[2]}}</td>
+               <td class="py-0">{{remoto[3]}}</td>
+               <td class="py-0" style="max-width: 6.9em;">
+                  <select class="form-select p-0" id="user-slot-{{remoto[0]}}">
+                     {% for item in lista %}
+                        {% if item == remoto[4] %}
+                           <option class="text-center" selected="{{remoto[4]}}">{{item}}</option>
+                        {% else %}
+                           <option class="text-center">{{item}}</option>
+                        {% endif %}
+                     {% endfor %}
+                  </select>
+               </td>
+               <td class="py-0" id="status-slot-{{remoto[0]}}">{{remoto[5]}}</td>
             </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>text</td>
-                <td>text</td>
-                <td>text</td>
-                <td>text</td>
-                <td>
-                    <select class="form-select">
-                        <option></option>
-                        <option>One</option>
-                        <option>Two</option>
-                        <option>Three</option>
-                    </select>
-                </td>
-                <td>text</td>
-            </tr>
-        </tbody>
-    </table>
+         {% endfor %}
+      </tbody>
+   </table>
 </div>
+<script type="text/javascript">
+   var dd = document;
+   const socket = io();
 
+   document.querySelectorAll('select').forEach(function (lista) {
+      lista.onchange = () => {
+         socket.emit('change_item', [lista.id, lista.value]);
+      }
+   });
 
-<br>
+   socket.on('change_item', (new_item) => {
+      console.log(`#user-slot-${new_item[0]} ${new_item[1]} ${new_item[2]} ${new_item[3]} ${new_item[4]}`);
+      dd.querySelector('#user-slot-' + new_item[0]).value = new_item[1];
+      dd.querySelector('#status-slot-' + new_item[0]).innerHTML = new_item[2];
+      dd.querySelector('.counter').innerHTML = `${new_item[3]}/${new_item[4]}`;
+      dd.querySelector('.progress-bar').style.width = `${new_item[3]/new_item[4]*100}%`;
+   });
+</script>
+<!-- Tabla -->
 
 
 <div class="container text-end" id="contact">
-    <div class="btn btn-light" onclick="alert('Para feedback o consultas, escribir a patocv2@hotmail.com')">
-        Ayuda
-    </div>
+   <div class="btn btn-light" onclick="alert('Para feedback o consultas, escribir a patocv2@hotmail.com')">
+      Ayuda
+   </div>
 </div>
 
 
 <!-- sockets acquired -->
 <div class="container d-none">
-    <span id="actual">aaa</span>
-    <button id="jala">asdf</button>
+   <span id="actual">aaa</span>
+   <button id="jala">asdf</button>
 </div>
 
 <script type="text/javascript">
-    const socket = io();
+   const jala = dd.querySelector('#jala');
+   const actual = dd.querySelector('#actual');
 
-    var dd = document;
-    const jala = dd.querySelector('#jala');
-    const actual = dd.querySelector('#actual');
+   socket.on('disconnect', () => {
+      console.log('no hay');
+   });
+   socket.on('connect', () => {
+      console.log('SI HAY');
+   });
 
-    socket.on('disconnect', () => {
-        console.log('no hay');
-    })
-    socket.on('connect', () => {
-        console.log('SI HAY');
-    })
-
-    jala.onclick = () => {
-        socket.emit('jamon', 'estoy bibo', (a) => {
-            console.log(a);
-            actual.innerHTML = a;
-        });
-    }
+   jala.onclick = () => {
+      socket.emit('jamon', 'estoy bibo', (a) => {
+         console.log(a);
+         actual.innerHTML = a;
+      });
+   }
 </script>
-<!--  -->
+<!-- skills -->
+
 
 <br>
-<div class="container text-center">
-    <div class="row">
-        <div class="col"><span class="c-angeles">0</span><button class="b-angeles">angeles</button></div>
-        <div class="col"><span class="c-pato">0</span><button class="b-pato">pato</button></div>
-        <div class="col"><span class="c-elfo">0</span><button class="b-elfo">elfo</button></div>
-        <div class="col"><span class="c-desk">0</span><button class="b-desk">desk</button></div>
-    </div>
-    <div class="row">
-        <div class="col" id="elnazi">asdf</div>
-    </div>
+<div class="container text-center d-none">
+   <div class="row">
+      <div class="col"><span class="c-angeles">0</span><button class="b-angeles">angeles</button></div>
+      <div class="col"><span class="c-pato">0</span><button class="b-pato">pato</button></div>
+      <div class="col"><span class="c-elfo">0</span><button class="b-elfo">elfo</button></div>
+      <div class="col"><span class="c-desk">0</span><button class="b-desk">desk</button></div>
+   </div>
+   <div class="row">
+      <div class="col" id="elnazi">asdf</div>
+   </div>
 </div>
 <script type="text/javascript">
-    const b_angeles = dd.querySelector('.b-angeles');
-    const b_pato = dd.querySelector('.b-pato');
-    const b_elfo = dd.querySelector('.b-elfo');
-    const b_desk = dd.querySelector('.b-desk');
-    
-    const c_angeles = dd.querySelector('.c-angeles');
-    const c_pato = dd.querySelector('.c-pato');
-    const c_elfo = dd.querySelector('.c-elfo');
-    const c_desk = dd.querySelector('.c-desk');
+   const b_angeles = dd.querySelector('.b-angeles');
+   const b_pato = dd.querySelector('.b-pato');
+   const b_elfo = dd.querySelector('.b-elfo');
+   const b_desk = dd.querySelector('.b-desk');
 
-    const boss = dd.querySelector('#elnazi');
+   const c_angeles = dd.querySelector('.c-angeles');
+   const c_pato = dd.querySelector('.c-pato');
+   const c_elfo = dd.querySelector('.c-elfo');
+   const c_desk = dd.querySelector('.c-desk');
 
-    b_angeles.onclick = () => {
-        if (boss.innerHTML !== 'JUEGO TERMINADO') {
-            socket.emit(
-                'testeo',
-                [b_angeles.innerHTML, parseInt(c_angeles.innerHTML)]
-            );
-        }
-    }
-    b_pato.onclick = () => {
-        if (boss.innerHTML !== 'JUEGO TERMINADO') {
-            socket.emit(
-                'testeo',
-                [b_pato.innerHTML, parseInt(c_pato.innerHTML)]
-            );
-        }
-    }
-    b_elfo.onclick = () => {
-        if (boss.innerHTML !== 'JUEGO TERMINADO') {
-            socket.emit(
-                'testeo',
-                [b_elfo.innerHTML, parseInt(c_elfo.innerHTML)]
-            );
-        }
-    }
-    b_desk.onclick = () => {
-        if (boss.innerHTML !== 'JUEGO TERMINADO') {
-            socket.emit(
-                'testeo',
-                [b_desk.innerHTML, parseInt(c_desk.innerHTML)]
-            );
-        }
-    }
-    socket.on('testeo', (a) => {
-        // console.log(a);
-        dd.querySelector('.c-' + a[0]).innerHTML = a[1]
-        boss.innerHTML = parseInt(c_angeles.innerHTML)
-                       + parseInt(c_pato.innerHTML)
-                       + parseInt(c_elfo.innerHTML)
-                       + parseInt(c_desk.innerHTML);
-        if (boss.innerHTML === '33') {
-            boss.innerHTML = 'JUEGO TERMINADO';
-        }
-    })
+   const boss = dd.querySelector('#elnazi');
 
+   b_angeles.onclick = () => {
+      if (boss.innerHTML !== 'JUEGO TERMINADO') {
+         socket.emit(
+            'testeo',
+            [b_angeles.innerHTML, parseInt(c_angeles.innerHTML)]
+         );
+      }
+   }
+   b_pato.onclick = () => {
+      if (boss.innerHTML !== 'JUEGO TERMINADO') {
+         socket.emit(
+            'testeo',
+            [b_pato.innerHTML, parseInt(c_pato.innerHTML)]
+         );
+      }
+   }
+   b_elfo.onclick = () => {
+      if (boss.innerHTML !== 'JUEGO TERMINADO') {
+         socket.emit(
+            'testeo',
+            [b_elfo.innerHTML, parseInt(c_elfo.innerHTML)]
+         );
+      }
+   }
+   b_desk.onclick = () => {
+      if (boss.innerHTML !== 'JUEGO TERMINADO') {
+         socket.emit(
+            'testeo',
+            [b_desk.innerHTML, parseInt(c_desk.innerHTML)]
+         );
+      }
+   }
+   socket.on('testeo', (a) => {
+      // console.log(a);
+      dd.querySelector('.c-' + a[0]).innerHTML = a[1]
+      boss.innerHTML = parseInt(c_angeles.innerHTML)
+                     + parseInt(c_pato.innerHTML)
+                     + parseInt(c_elfo.innerHTML)
+                     + parseInt(c_desk.innerHTML);
+      if (boss.innerHTML === '33') {
+         boss.innerHTML = 'JUEGO TERMINADO';
+      }
+   });
 </script>
 
 </body>
