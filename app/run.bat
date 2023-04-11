@@ -1,4 +1,6 @@
 @echo off
-rem dist\temp\Scripts\python.exe app.py dev
-dist\temp\Scripts\python.exe app.py Gevent
+
+:: por defecto, debe encontrarse en modo 'dev'
+..\.env\Scripts\python.exe app.py dev
+rem ..\.env\Scripts\python.exe app.py Gevent
 pause>nul

@@ -1,12 +1,13 @@
-import os, json, time
+import os, json, time, sqlite3
 from flask import (
      Flask, request, render_template,
      url_for, redirect, jsonify,
 )
 from flask_socketio import SocketIO, emit
 from sys import argv
-import sqlite3
 
+
+### Basic setup ###
 con = sqlite3.connect('remo.db')
 
 app = Flask(
@@ -40,6 +41,7 @@ def sw():
      return app.send_static_file('servise-worker.js')
 
 
+### Real sh1t ###
 @app.route('/')
 def home():
      with con:
@@ -95,7 +97,7 @@ def change_item(msg):
      with con:
           persona = []
           query = con.execute(
-               "SELECT * FROM v_list where nombre = ?",
+               "SELECT * FROM v_list WHERE nombre = ?",
                (msg[1],)
           )
 
@@ -138,12 +140,7 @@ def change_item(msg):
 if __name__ == '__main__':
      if argv[1] == 'dev':
           print('running on', argv[1])
-          socketio.run(
-               app,
-               host='0.0.0.0',
-               port=10123,
-               debug=True
-          )
+          socketio.run(app, host='0.0.0.0', port=10111, debug=True)
      else:
           print('running on', argv[1])
           socketio.run(app, host='0.0.0.0', port=10123)
