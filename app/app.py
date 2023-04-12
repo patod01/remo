@@ -93,7 +93,8 @@ def testeo(msg):
 
 @socketio.event
 def change_item(msg):
-     print(msg, type(msg))
+     hora_solicitud = time.time()
+     print(msg, '-', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(hora_solicitud)))
      with con:
           persona = []
           query = con.execute(
@@ -119,7 +120,7 @@ def change_item(msg):
      with con:
           query = con.execute(
                "INSERT INTO historial (list_view_ID, time) VALUES (?, ?)",
-               (persona[0][0], round(time.time()))
+               (persona[0][0], round(hora_solicitud))
           )
 
      with con:

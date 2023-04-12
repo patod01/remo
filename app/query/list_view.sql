@@ -10,4 +10,4 @@ SELECT
 	alert_name AS nombre,
 	status_name AS estado
 FROM alerts LEFT JOIN status ON alerts.status_ID = status.status_ID
-ORDER BY item_ID;
+ORDER BY nombre;
