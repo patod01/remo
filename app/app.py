@@ -1,10 +1,9 @@
-import os, json, time, sqlite3
+import os, json, time, sqlite3, signal, sys
 from flask import (
      Flask, request, render_template,
      url_for, redirect, jsonify,
 )
 from flask_socketio import SocketIO, emit
-from sys import argv
 
 
 ### Basic setup ###
@@ -19,7 +18,7 @@ app = Flask(
 
 app.config['SECRET_KEY'] = 'nigga'
 
-if argv[1] == 'dev':
+if sys.argv[1] == 'dev':
      socketio = SocketIO(
           app,
           logger=True,
@@ -29,6 +28,14 @@ if argv[1] == 'dev':
      )
 else:
      socketio = SocketIO(app, ping_interval=50)
+
+
+# def shutdown(signum, frame) -> None:
+#      print('server shutting down... press enter.')
+#      input() # delay better choice?
+#      sys.exit()
+
+# signal.signal(signal.SIGINT, shutdown)
 
 
 @app.errorhandler(404)
@@ -139,11 +146,11 @@ def change_item(msg):
 
 
 if __name__ == '__main__':
-     if argv[1] == 'dev':
-          print('running on', argv[1])
-          socketio.run(app, host='0.0.0.0', port=10111, debug=True)
+     if sys.argv[1] == 'dev':
+          print('running on', sys.argv[1])
+          socketio.run(app, host='0.0.0.0', port=10011, debug=True)
      else:
-          print('running on', argv[1])
-          socketio.run(app, host='0.0.0.0', port=10123)
+          print('running on', sys.argv[1])
+          socketio.run(app, host='0.0.0.0', port=10001)
 
 #ned
