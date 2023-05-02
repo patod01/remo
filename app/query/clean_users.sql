@@ -1,1 +1,1 @@
-UPDATE remotos SET list_view_ID = 'u00';
+UPDATE remotos SET [list_view_ID] = 'u00';
