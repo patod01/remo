@@ -1,4 +1,4 @@
--- BEGIN TRANSACTION;
+BEGIN TRANSACTION;
 INSERT INTO "status"
 	("status_ID", "status_name", "status_type")
 VALUES
@@ -33,7 +33,7 @@ VALUES
 	(0,	' ',		NULL, ' ',		NULL, 1, 0),
 	(1,	'name 1',	NULL, 'apelido',	NULL, 1, 1),
 	(2,	'name 2',	NULL, 'apelido x',	NULL, 1, 1),
-	(3,	'name 2',	NULL, 'apelido x',	NULL, 1, 1),
-	(4,	'name 2',	NULL, 'apelido x',	NULL, 1, 1),
-	(5,	'name 2',	NULL, 'apelido x',	NULL, 1, 1);
--- COMMIT;
+	(3,	'name 3',	NULL, 'apelido x',	NULL, 1, 1),
+	(4,	'name 4',	NULL, 'apelido x',	NULL, 1, 1),
+	(5,	'name 5',	NULL, 'apelido x',	NULL, 1, 1);
+COMMIT;
