@@ -15,7 +15,8 @@ docker run --rm -d \
 -w /app \
 -v "$(pwd)":/app \
 python:3.11.2-alpine3.17 \
-ash -c " \
-pip install --upgrade pip && \
-pip install --no-cache-dir -r req.txt \
+ash -c "
+pip install --upgrade pip
+pip install --no-cache-dir -r req.txt
+python app.py dev
 "
