@@ -7,10 +7,10 @@ from flask_socketio import SocketIO, emit
 
 
 ### Basic setup ###
-data_base = 'remo.db'
+data_base = 'db/remo.db'
 
 if not os.path.isfile(data_base):
-     data_base = 'test.db'
+     data_base = 'db/test.db'
 
 if not os.path.isfile(data_base):
      ### Setup ###
@@ -186,6 +186,6 @@ if __name__ == '__main__':
           socketio.run(app, host='0.0.0.0', port=10011, debug=True)
      else:
           print('running on', sys.argv[1])
-          socketio.run(app, host='0.0.0.0', port=10001)
+          socketio.run(app, host='0.0.0.0', port=int(os.getenv(PORT, 10001)))
 
 #ned
