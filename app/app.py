@@ -1,4 +1,4 @@
-import os, json, time, sqlite3, signal, sys
+import os, json, time, sqlite3, sys
 from flask import (
      Flask, request, render_template,
      url_for, redirect, jsonify,
@@ -27,7 +27,12 @@ if not os.path.isfile(data_base):
           v_count = ''.join(v_count.readlines())
           # print(v_count)
 
-     setup_query = 'BEGIN TRANSACTION;' + '\n' + schema + '\n' + v_list + '\n' + v_remotes + '\n' + v_count + 'COMMIT;'
+     setup_query = 'BEGIN TRANSACTION;' + '\n' \
+                 + schema + '\n' \
+                 + v_list + '\n' \
+                 + v_remotes + '\n' \
+                 + v_count \
+                 + 'COMMIT;'
      print(setup_query)
 
      with sqlite3.connect(data_base) as con:
@@ -65,14 +70,6 @@ else:
      socketio = SocketIO(app, ping_interval=50)
 
 
-# def shutdown(signum, frame) -> None:
-#      print('server shutting down... press enter.')
-#      input() # delay better choice?
-#      sys.exit()
-
-# signal.signal(signal.SIGINT, shutdown)
-
-
 @app.errorhandler(404)
 def go_default(error):
      return 'notmyproblem .!.', 404
@@ -101,26 +98,6 @@ def home():
           query = con.execute("SELECT * FROM v_remotos")
           remotos = [row for row in query]
      return render_template('index.html', lista=lista, busy=c_busy, total=c_total, remotos=remotos)
-
-
-@app.route('/api/', methods=['POST', 'GET'])#, 'PUT', 'DELETE'])
-def api():
-     if request.method == 'POST':
-          if request.is_json:
-               if request.json['action'] == 'try':
-                    os.system('start')
-                    hora = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-                    respuesta = {'lol': 'sop', 'hora': hora}
-                    return jsonify(respuesta)
-               else:
-                    return jsonify('Not implemented.')
-     elif request.method == 'GET':
-          ...
-     elif request.method == 'PUT':
-          ...
-     elif request.method == 'DELETE':
-          ...
-     return jsonify('op')
 
 
 @socketio.event
@@ -186,6 +163,6 @@ if __name__ == '__main__':
           socketio.run(app, host='0.0.0.0', port=10011, debug=True)
      else:
           print('running on', sys.argv[1])
-          socketio.run(app, host='0.0.0.0', port=int(os.getenv(PORT, 10001)))
+          socketio.run(app, host='0.0.0.0', port=int(os.getenv('PORT', 10001)))
 
 #ned
