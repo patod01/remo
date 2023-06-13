@@ -113,7 +113,6 @@ def testeo(msg):
 @socketio.event
 def change_item(msg):
      hora_solicitud = time.time()
-     print(msg, '-', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(hora_solicitud)))
      with con:
           persona = []
           query = con.execute(
@@ -151,7 +150,9 @@ def change_item(msg):
 
      answer += [c_busy] + [c_total]
 
-     print('enviando:', answer)
+     with open('data/log.txt', 'a') as log:
+          print(msg, '-', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(hora_solicitud)), file=log)
+          print('enviando:', answer, file=log)
 
      emit('change_item', answer, broadcast=True)
      return answer
