@@ -7,10 +7,10 @@ from flask_socketio import SocketIO, emit
 
 
 ### Basic setup ###
-data_base = 'db/remo.db'
+data_base = 'data/remo.db'
 
 if not os.path.isfile(data_base):
-     data_base = 'db/test.db'
+     data_base = 'data/test.db'
 
 if not os.path.isfile(data_base):
      ### Setup ###
