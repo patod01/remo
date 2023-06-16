@@ -7,27 +7,25 @@ from flask_socketio import SocketIO, emit
 
 
 ### Basic setup ###
+
+# Database initialization / creation #
 data_base = 'data/remo.db'
 
 if not os.path.isfile(data_base):
      data_base = 'data/test.db'
 
 if not os.path.isfile(data_base):
-     ### Setup ###
+     # Setup #
      with open('query/schema.sql') as schema:
           schema = ''.join(schema.readlines())
-          # print(schema)
      with open('query/list_view.sql') as v_list:
           v_list = ''.join(v_list.readlines())
-          # print(v_list)
      with open('query/remotes_view.sql') as v_remotes:
           v_remotes = ''.join(v_remotes.readlines())
-          # print(v_remotes)
      with open('query/count_view.sql') as v_count:
           v_count = ''.join(v_count.readlines())
-          # print(v_count)
 
-     setup_query = 'BEGIN TRANSACTION;' + '\n' \
+     setup_query = 'BEGIN TRANSACTION;\n' \
                  + schema + '\n' \
                  + v_list + '\n' \
                  + v_remotes + '\n' \
@@ -38,7 +36,7 @@ if not os.path.isfile(data_base):
      with sqlite3.connect(data_base) as con:
           con.executescript(setup_query)
 
-     ### Mock ###
+     # Mock #
      with open('query/moco.sql') as mock:
           mock = ''.join(mock.readlines())
           print(mock)
@@ -49,6 +47,15 @@ if not os.path.isfile(data_base):
 con = sqlite3.connect(data_base)
 
 
+# App information #
+app_info_name = 'info.json'
+
+with open(app_info_name) as app_info_conn:
+     app_info = json.load(app_info_conn)
+del app_info_conn
+
+
+# Flask setup #
 app = Flask(
      __name__,
      static_url_path='',
@@ -70,6 +77,7 @@ else:
      socketio = SocketIO(app, ping_interval=50)
 
 
+# Default settings #
 @app.errorhandler(404)
 def go_default(error):
      return 'notmyproblem .!.', 404
@@ -97,7 +105,14 @@ def home():
           remotos = []
           query = con.execute("SELECT * FROM v_remotos")
           remotos = [row for row in query]
-     return render_template('index.html', lista=lista, busy=c_busy, total=c_total, remotos=remotos)
+     return render_template(
+          'index.html',
+          lista=lista,
+          busy=c_busy,
+          total=c_total,
+          remotos=remotos,
+          app_info=app_info
+     )
 
 
 @socketio.event
