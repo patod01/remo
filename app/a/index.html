@@ -142,10 +142,42 @@
 
 
 <div class="container text-end" id="contact">
-   <div class="btn btn-light" onclick="alert('Para feedback o consultas, escribir a Patricio Carrasco V.')">
-      Ayuda
+   <div id="ayuda" class="btn btn-light" onclick="elmo.showModal()">
+      Mas informacion
    </div>
 </div>
+
+<dialog id="elmo">
+   <div class="container">Para feedback o consultas, escribir a Patricio Carrasco V.</div>
+   <div class="container">
+      Informacion sobre la aplicacion:
+      <ul>
+         <li>nombre de la app: {{app_info["name"]}}</li>
+         <li>version estable de app: {{app_info["app_ver"]}}</li>
+         <li>version en desarrollo: {{app_info["dev_ver"]}}</li>
+      </ul>
+   </div>
+   <div class="container text-end">
+      <button id="closelmo" class="btn btn-light">ok</button>
+   </div>
+</dialog>
+
+<script>
+   const elmo = document.querySelector('#elmo');
+   const closelmo = document.querySelector('#closelmo');
+
+   closelmo.onclick = () => {elmo.close();}
+
+   elmo.addEventListener("click", e => {
+      const elmoDim = elmo.getBoundingClientRect();
+      if (
+         e.clientX < elmoDim.left ||
+         e.clientX > elmoDim.right ||
+         e.clientY < elmoDim.top ||
+         e.clientY > elmoDim.bottom
+      ) {elmo.close();}
+   })
+</script>
 
 
 <!-- sockets acquired -->
