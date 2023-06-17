@@ -1,7 +1,7 @@
 {
-  "name": "Remo",
-  "app_ver": "0.2.4",
-  "dev_ver": "0.5.1",
+  "app_name": "Remo",
+  "alp_ver": "3.17",
   "pyt_ver": "3.11.2",
-  "alp_ver": "3.17"
+  "sqlite_ver": "3.39",
+  "app_ver": "0.5.2"
 }

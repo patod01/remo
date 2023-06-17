@@ -142,19 +142,20 @@
 
 
 <div class="container text-end" id="contact">
-   <div id="ayuda" class="btn btn-light" onclick="elmo.showModal()">
+   <div class="btn btn-light" onclick="elmo.showModal(); commitAPI()">
       Mas informacion
    </div>
 </div>
 
 <dialog id="elmo">
    <div class="container">Para feedback o consultas, escribir a Patricio Carrasco V.</div>
+   <br>
    <div class="container">
       Informacion sobre la aplicacion:
       <ul>
-         <li>nombre de la app: {{app_info["name"]}}</li>
-         <li>version estable de app: {{app_info["app_ver"]}}</li>
-         <li>version en desarrollo: {{app_info["dev_ver"]}}</li>
+         <li>nombre de la app: <b>{{app_info["app_name"]}}</b></li>
+         <li>ultima version estable: <b>{{app_info["app_ver"]}}</b></li>
+         <li>version en desarrollo: <b><span id="latest-commit-ver"></span></b></li>
       </ul>
    </div>
    <div class="container text-end">
@@ -163,6 +164,25 @@
 </dialog>
 
 <script>
+   function commitAPI() {
+      const owner = 'patod01';
+      const repo = 'remo';
+      const branch = 'patriarch';
+      const commitVerSpan = document.querySelector('#latest-commit-ver');
+
+      fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${branch}`)
+         .then(response => response.json())
+         .then(data => {
+            const latestCommit = data.commit;
+            const message = latestCommit.message;
+            const commitVer = message.substring(2, message.indexOf(' '));
+            document.querySelector('#latest-commit-ver').innerHTML = commitVer;
+         })
+         .catch(error => {
+            console.error('Error al obtener el commit más reciente:', error);
+         });
+   }
+
    const elmo = document.querySelector('#elmo');
    const closelmo = document.querySelector('#closelmo');
 
