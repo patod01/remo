@@ -48,11 +48,23 @@ con = sqlite3.connect(data_base)
 
 
 # App information #
-app_info_name = 'info.json'
+app_info_path = 'info.json'
 
-with open(app_info_name) as app_info_conn:
+with open(app_info_path) as app_info_conn:
      app_info = json.load(app_info_conn)
 del app_info_conn
+
+# Posts #
+posts_path = 'data/post.json'
+
+with open(posts_path) as posts_conn:
+     app_info["posts"] = json.load(posts_conn)
+del posts_conn
+
+if len(sys.argv) == 3:
+     app_info["posts"]["developer"] = sys.argv[2]
+elif not app_info["posts"]["developer"]:
+     app_info["posts"]["developer"] = 'el desarrollador'
 
 
 # Flask setup #
