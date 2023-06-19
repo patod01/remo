@@ -1,5 +1,10 @@
 #! /bin/ash
 
+# This file is intended to be used when the source code has been
+# downloaded and it's gonna be running from outside of a container (a
+# volume).
+# When building an image, this file can be ignored.
+
 docker network create alambre
 
 docker run --rm -d \

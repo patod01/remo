@@ -1,5 +1,10 @@
 @echo off
 
+:: This file is intended to be used when the source code has been
+:: downloaded and it's gonna be running from outside of a container
+:: (a volume).
+:: When building an image, this file can be ignored.
+
 :: configuracion de entorno para windows
 if not exist ..\.env\Scripts\python.exe (
      echo Installanding Piton...
@@ -15,6 +20,6 @@ if not exist ..\.env\Scripts\python.exe (
 
 :: por defecto, debe encontrarse en modo 'dev'
 ..\.env\Scripts\python.exe app.py dev
-rem ..\.env\Scripts\python.exe app.py Gevent
+rem ..\.env\Scripts\python.exe app.py Gevent0
 
 :ned
