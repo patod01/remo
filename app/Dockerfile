@@ -14,17 +14,32 @@
 # docker manifest create patod01/remo:X-dev patod01/remo:X-amd patod01/remo:X-arm
 # docker manifest push patod01/remo:X-dev
 
-### actual sht ###
 
-FROM python:3.11.2-alpine3.17
-WORKDIR /app
-COPY . .
+### actual sh1t ###
+FROM python:3.11.2-alpine3.17 AS pydep
+
+ENV PATH "/server/virt/bin:$PATH"
+ENV VIRTUAL_ENV "/server/virt"
+
+# dependencias para pie
+RUN apk add gcc musl-dev libffi-dev make g++ python3-dev libev-dev
+# aparentemente no son necesarios: g++ python3-dev libev-dev
+
+WORKDIR /server
+RUN python -m venv virt
+COPY ./req.txt .
 RUN python -m pip install --upgrade pip
 
-# aparentemente no son necesarios g++ python3-dev libev-dev
-# pendiente probar tama;o final de la imagen para ambos casos
-RUN apk add gcc musl-dev libffi-dev make g++ python3-dev libev-dev
-
 RUN pip install --no-cache-dir -r req.txt
-RUN mkdir -p db
-CMD python app.py dev
+
+
+### actual sh2t ###
+FROM python:3.11.2-alpine3.17 AS server
+
+# ENV PYTHONUNBUFFERED 1
+ENV DEVELOPER=""
+WORKDIR /server/app
+COPY --from=pydep /server/virt ../virt
+COPY . .
+
+CMD source ../virt/bin/activate && python app.py dev $DEVELOPER

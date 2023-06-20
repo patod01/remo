@@ -189,7 +189,7 @@ if __name__ == '__main__':
      if sys.argv[1] == 'dev':
           print('running on', sys.argv[1])
           socketio.run(app, host='0.0.0.0', port=10011, debug=True)
-     else:
+     elif sys.argv[1] == 'Gevent0':
           print('running on', sys.argv[1])
           socketio.run(app, host='0.0.0.0', port=int(os.getenv('PORT', 10001)))
 
