@@ -18,8 +18,8 @@
 ### actual sh1t ###
 FROM python:3.11.2-alpine3.17 AS pydep
 
-ENV PATH "/server/virt/bin:$PATH"
-ENV VIRTUAL_ENV "/server/virt"
+ENV PATH="/server/virt/bin:$PATH"
+ENV VIRTUAL_ENV="/server/virt"
 
 # dependencias para pie
 RUN apk add gcc musl-dev libffi-dev make g++ python3-dev libev-dev
@@ -36,10 +36,11 @@ RUN pip install --no-cache-dir -r req.txt
 ### actual sh2t ###
 FROM python:3.11.2-alpine3.17 AS server
 
-# ENV PYTHONUNBUFFERED 1
+ENV MODE="dev"
 ENV DEVELOPER=""
+# ENV PYTHONUNBUFFERED 1
 WORKDIR /server/app
 COPY --from=pydep /server/virt ../virt
 COPY . .
 
-CMD source ../virt/bin/activate && python app.py dev $DEVELOPER
+CMD source ../virt/bin/activate && python app.py $MODE $DEVELOPER

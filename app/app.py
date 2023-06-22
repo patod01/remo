@@ -61,8 +61,17 @@ with open(posts_path) as posts_conn:
      app_info["posts"] = json.load(posts_conn)
 del posts_conn
 
-if len(sys.argv) == 3:
-     app_info["posts"]["developer"] = sys.argv[2]
+if len(sys.argv) >= 3:
+     developer = sys.argv[2]
+
+     for char in ('-', '_'):
+          developer = developer.replace(2*char, '?')
+          developer = developer.replace(char, ' ')
+          developer = developer.replace('?', char)
+          developer = ' '.join(developer.split())
+
+     app_info["posts"]["developer"] = developer
+     del developer
 elif not app_info["posts"]["developer"]:
      app_info["posts"]["developer"] = 'el desarrollador'
 
@@ -186,7 +195,9 @@ def change_item(msg):
 
 
 if __name__ == '__main__':
-     if sys.argv[1] == 'dev':
+     if len(sys.argv) < 2:
+          print('Se debe especificar: 1) modo, 2) desarrollador')
+     elif sys.argv[1] == 'dev':
           print('running on', sys.argv[1])
           socketio.run(app, host='0.0.0.0', port=10011, debug=True)
      elif sys.argv[1] == 'Gevent0':
