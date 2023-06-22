@@ -189,6 +189,9 @@ def change_item(msg):
      with open('data/log.txt', 'a') as log:
           print(msg, '-', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(hora_solicitud)), file=log)
           print('enviando:', answer, file=log)
+          # probar en render
+          print(msg, '-', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(hora_solicitud)), file=sys.stdout, flush=True)
+          print('enviando:', answer, file=sys.stdout, flush=True)
 
      emit('change_item', answer, broadcast=True)
      return answer
