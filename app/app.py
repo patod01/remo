@@ -8,6 +8,15 @@ from flask_socketio import SocketIO, emit
 
 ### Basic setup ###
 
+if len(sys.argv) < 2:
+     # enforces the minimum number of parameters passed by the user
+     print(
+          '\n  Se debe especificar al menos el modo de ejecucion.'
+          '\n  Sintaxis:\n'
+          '\n    python app.py MODE [DEVELOPER]\n'
+     )
+     raise Exception
+
 # Database initialization / creation #
 data_base = 'data/remo.db'
 
@@ -198,9 +207,7 @@ def change_item(msg):
 
 
 if __name__ == '__main__':
-     if len(sys.argv) < 2:
-          print('Se debe especificar: 1) modo, 2) desarrollador')
-     elif sys.argv[1] == 'dev':
+     if sys.argv[1] == 'dev':
           print('running on', sys.argv[1])
           socketio.run(app, host='0.0.0.0', port=10011, debug=True)
      elif sys.argv[1] == 'Gevent0':
