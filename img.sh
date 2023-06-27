@@ -37,10 +37,9 @@ elif [ "$modo" = "publish" ] && [ -n "$VER" ]; then
      echo docker manifest create patod01/remo patod01/remo:$VER-amd patod01/remo:$VER-arm
      echo docker manifest push patod01/remo:$VER
      echo docker manifest push patod01/remo
-if [ "$modo" = "install" ]; then
-     echo uso: build.sh modo version push
+elif [ "$modo" = "--help" ] || [ "$modo" = "-h" ]; then
+     echo uso:
+     echo build.sh install \| build VERSION [publish] \| publish VERSION
 else
      echo lel
 fi
-
-echo script terminado.
