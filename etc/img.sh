@@ -40,6 +40,14 @@ elif [ "$modo" = "publish" ] && [ -n "$VER" ]; then
      echo docker manifest push patod01/remo:$VER
      echo docker manifest push patod01/remo
 elif [ "$modo" = "--help" ] || [ "$modo" = "-h" ]; then
+     echo Esta es una utilidad para construir los siguientes grupos de instrucciones:
+     echo $'\n'
+     echo - install: instalar `buildx`.
+     echo - build: construir las imagenes de docker (dos plataformas por defecto).
+     echo - publish: publicar a dockerhub.
+     echo $'\n'
+     echo Nota: Las instrucciones generadas no son ejecutadas automaticamente.
+     echo $'\n'
      echo uso:
      echo build.sh install \| build VERSION [publish] \| publish VERSION
 else

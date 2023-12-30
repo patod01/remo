@@ -34,18 +34,18 @@ if not os.path.isfile(data_base):
      with open('query/count_view.sql') as v_count:
           v_count = ''.join(v_count.readlines())
 
-     setup_query = 'BEGIN TRANSACTION;\n' \
+     setup_query = 'BEGIN TRANSACTION;' + '\n' \
                  + schema + '\n' \
                  + v_list + '\n' \
                  + v_remotes + '\n' \
-                 + v_count \
-                 + 'COMMIT;'
+                 + v_count + '\n' \
+                 + 'COMMIT;' + '\n'
      print(setup_query)
 
      with sqlite3.connect(data_base) as con:
           con.executescript(setup_query)
 
-     # Mock #
+     # Mock data #
      with open('query/moco.sql') as mock:
           mock = ''.join(mock.readlines())
           print(mock)
