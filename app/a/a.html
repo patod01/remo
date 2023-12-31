@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>testa</title>
+</head>
+<body>
+   <div>{{app_info}}</div>
+   {% if app_posts|length > 0 %}
+   <script defer type="text/javascript">
+      setTimeout(() => {
+      {%- for anuncio in app_posts %}
+         alert('{{anuncio}}');
+      {%- endfor %}
+      }, 1000);
+   </script>
+   {% endif %}
+</body>
+</html>

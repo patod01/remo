@@ -19,6 +19,15 @@
    <!-- p -->
    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='a.css') }}">
    <script defer type="text/javascript" src="{{ url_for('static', filename='a.js') }}"></script>
+   {% if app_posts['anuncios']|length > 0 %}
+   <script defer type="text/javascript">
+      setTimeout(() => {
+      {%- for anuncio in app_posts['anuncios'] %}
+         alert('ANUNCIO: {{anuncio}}');
+      {%- endfor %}
+      }, 3000);
+   </script>
+   {% endif %}
 
    <!-- bootstrap -->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -148,7 +157,7 @@
 </div>
 
 <dialog id="elmo">
-   <div class="container">Para feedback o consultas, contactar con {{app_info["posts"]["developer"]}}.</div>
+   <div class="container">Para feedback o consultas, contactar con {{app_posts["administrador"]}}.</div>
    <br>
    <div class="container">
       Informacion sobre la aplicacion:

@@ -56,6 +56,11 @@ if not os.path.isfile(data_base):
 con = sqlite3.connect(data_base)
 
 
+def json_content(json_file):
+     with open(json_file) as conexion:
+          contenido = json.load(conexion)
+     return contenido
+
 # App information #
 app_info_path = 'info.json'
 
@@ -64,10 +69,10 @@ with open(app_info_path) as app_info_conn:
 del app_info_conn
 
 # Posts #
-posts_path = 'data/post.json'
+app_posts_path = 'data/post.json'
 
-with open(posts_path) as posts_conn:
-     app_info["posts"] = json.load(posts_conn)
+with open(app_posts_path) as posts_conn:
+     app_posts = json.load(posts_conn)
 del posts_conn
 
 if len(sys.argv) >= 3:
@@ -79,10 +84,10 @@ if len(sys.argv) >= 3:
           developer = developer.replace('?', char)
           developer = ' '.join(developer.split())
 
-     app_info["posts"]["developer"] = developer
+     app_posts['administrador'] = developer
      del developer
-elif not app_info["posts"]["developer"]:
-     app_info["posts"]["developer"] = 'el desarrollador'
+elif not app_posts['administrador']:
+     app_posts['administrador'] = 'el desarrollador'
 
 
 # Flask setup #
@@ -135,13 +140,33 @@ def home():
           remotos = []
           query = con.execute("SELECT * FROM v_remotos")
           remotos = [row for row in query]
+
+     if not json_content(app_posts_path)['administrador']:
+          app_posts['administrador'] = 'el desarrollador'
+     else:
+          app_posts['administrador'] = json_content(app_posts_path)['administrador']
+
+     app_posts['anuncios'] = json_content(app_posts_path)['anuncios']
+     print(len(app_posts['anuncios']))
      return render_template(
           'index.html',
           lista=lista,
           busy=c_busy,
           total=c_total,
           remotos=remotos,
-          app_info=app_info
+          app_info=app_info,
+          app_posts=app_posts,
+     )
+
+
+# ruta para pruebas, borrar #
+@app.route('/testa')
+def ets():
+     app_posts['anuncios'] = json_content(app_posts_path)['anuncios']
+     print(app_posts['anuncios'])
+     return render_template(
+          'a.html',
+          app_posts=app_posts['anuncios']
      )
 
 
