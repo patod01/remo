@@ -10,3 +10,7 @@ body {
      max-width: 101px;
      text-align: center;
 }
+
+table {
+     user-select: none;
+}

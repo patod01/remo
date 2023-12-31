@@ -109,8 +109,8 @@
          {% for remoto in remotos %}
             <tr>
                <td class="py-0">{{remoto[0]}}</td>
-               <td class="py-0">{{remoto[1]}}</td>
-               <td class="py-0">{{remoto[2]}}</td>
+               <td class="py-0" id="remot-{{remoto[0]}}" onclick="copit(this)">{{remoto[1]}}</td>
+               <td class="py-0" id="remotip-{{remoto[0]}}" onclick="copit(this)">{{remoto[2]}}</td>
                <td class="py-0">{{remoto[3]}}</td>
                <td class="py-0" style="max-width: 6.9em;">
                   <select class="form-select p-0" id="user-slot-{{remoto[0]}}">
@@ -146,6 +146,12 @@
       dd.querySelector('.counter').innerHTML = `${new_item[3]}/${new_item[4]}`;
       dd.querySelector('.progress-bar').style.width = `${new_item[3]/new_item[4]*100}%`;
    });
+</script>
+<script type="text/javascript">
+   function copit(esto) {
+      console.log(esto.innerHTML);
+      navigator.clipboard.writeText(esto.innerHTML);
+   }
 </script>
 <!-- Tabla -->
 
