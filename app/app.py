@@ -55,7 +55,6 @@ if not os.path.isfile(data_base):
 
 con = sqlite3.connect(data_base)
 
-
 def json_content(json_file):
      with open(json_file) as conexion:
           contenido = json.load(conexion)
@@ -68,7 +67,7 @@ with open(app_info_path) as app_info_conn:
      app_info = json.load(app_info_conn)
 del app_info_conn
 
-# Posts #
+# Server posts #
 app_posts_path = 'data/post.json'
 
 with open(app_posts_path) as posts_conn:
@@ -124,6 +123,7 @@ def sw():
 
 
 ### Real sh1t ###
+
 @app.route('/')
 def home():
      with con:

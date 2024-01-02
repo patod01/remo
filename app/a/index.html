@@ -25,7 +25,7 @@
       {%- for anuncio in app_posts['anuncios'] %}
          alert('ANUNCIO: {{anuncio}}');
       {%- endfor %}
-      }, 3000);
+      }, 1000);
    </script>
    {% endif %}
 
@@ -162,7 +162,48 @@
 <!-- Tabla -->
 
 
-<!-- Modal info -->
+<!-- Help modal -->
+<div class="container text-end" id="contact">
+   <div class="btn btn-light" onclick="how_to.showModal()">
+      Ayuda
+   </div>
+</div>
+
+<dialog id="how_to">
+   <div class="container">Uso de la app:</div>
+   <br>
+   <ul>
+      <li>Para copiar el nombre o la IP del remoto, haga clic izquierdo sobre la celda que corresponda.</li>
+      <li>Antes de conectarse al remoto, seleccione su nombre en el listado del campo `Usuario Activo`.</li>
+      <li>Una vez desocupado el remoto, desmarque su nombre con la opcion vacia al inicio de la lista.</li>
+      <li>Si el remoto presenta fallas para conectar, en lugar de seleccionar su nombre, seleccione `no disponible`.</li>
+      <li>Si puede conectarse al remoto, pero planner presenta problemas, seleccione `sin acceso a la app`.</li>
+   </ul>
+   <div class="container text-end">
+      <button id="close_how_to" class="btn btn-light">Cerrar</button>
+   </div>
+</dialog>
+
+<script>
+   const how_to = document.querySelector('#how_to');
+   const close_how_to = document.querySelector('#close_how_to');
+
+   close_how_to.onclick = () => {how_to.close();}
+
+   how_to.addEventListener("click", e => {
+      const how_toDim = how_to.getBoundingClientRect();
+      if (
+         e.clientX < how_toDim.left ||
+         e.clientX > how_toDim.right ||
+         e.clientY < how_toDim.top ||
+         e.clientY > how_toDim.bottom
+      ) {how_to.close();}
+   })
+</script>
+<!-- Help modal -->
+
+
+<!-- Info modal -->
 <div class="container text-end" id="contact">
    <div class="btn btn-light" onclick="elmo.showModal(); commitAPI()">
       Mas informacion
@@ -220,7 +261,7 @@
       ) {elmo.close();}
    })
 </script>
-<!-- Modal info -->
+<!-- Info modal -->
 
 
 <!-- sockets acquired -->
