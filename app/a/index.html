@@ -109,8 +109,8 @@
          {% for remoto in remotos %}
             <tr>
                <td class="py-0">{{remoto[0]}}</td>
-               <td class="py-0" id="remot-{{remoto[0]}}" onclick="copit(this)">{{remoto[1]}}</td>
-               <td class="py-0" id="remotip-{{remoto[0]}}" onclick="copit(this)">{{remoto[2]}}</td>
+               <td class="py-0 copiable" id="remot-{{remoto[0]}}" onclick="copit(this)">{{remoto[1]}}</td>
+               <td class="py-0 copiable" id="remotip-{{remoto[0]}}" onclick="copit(this)">{{remoto[2]}}</td>
                <td class="py-0">{{remoto[3]}}</td>
                <td class="py-0" style="max-width: 6.9em;">
                   <select class="form-select p-0" id="user-slot-{{remoto[0]}}">
@@ -129,6 +129,9 @@
       </tbody>
    </table>
 </div>
+
+<div class="badge text-bg-warning">Texto copiado</div>
+
 <script type="text/javascript">
    var dd = document;
    const socket = io();
@@ -151,6 +154,9 @@
    function copit(esto) {
       console.log(esto.innerHTML);
       navigator.clipboard.writeText(esto.innerHTML);
+      document.querySelector('.badge').style.opacity = 1
+      setTimeout(() => document.querySelector('.badge').style.opacity = 0
+      , 1000)
    }
 </script>
 <!-- Tabla -->

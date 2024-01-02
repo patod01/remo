@@ -14,3 +14,17 @@ body {
 table {
      user-select: none;
 }
+
+.badge {
+     font-size: 17px !important;
+     position: fixed;
+     bottom: 42%;
+     left: 50%;
+     translate: -50%;
+     transition: all 0.5s;
+     opacity: 0;
+}
+
+.copiable:active {
+     background: orange;
+}
