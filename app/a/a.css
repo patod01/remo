@@ -23,8 +23,11 @@ table {
      translate: -50%;
      transition: all 0.5s;
      opacity: 0;
+     background: rgb(228, 97, 15);
+     color: white;
 }
 
 .copiable:active {
-     background: orange;
+     background: rgb(228, 97, 15);
+     color: white !important;
 }
