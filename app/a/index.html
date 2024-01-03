@@ -162,6 +162,20 @@
 <!-- Tabla -->
 
 
+<script>
+   function out_of_modal_close(evento) {
+      // If user clicks out of modal box, it closes itself
+      const modal_dimensions = this.getBoundingClientRect();
+      if (
+         evento.clientX < modal_dimensions.left ||
+         evento.clientX > modal_dimensions.right ||
+         evento.clientY < modal_dimensions.top ||
+         evento.clientY > modal_dimensions.bottom
+      ) {this.close();}
+   }
+</script>
+
+
 <!-- Help modal -->
 <div class="container text-end" id="contact">
    <div class="btn btn-light" onclick="how_to.showModal()">
@@ -180,25 +194,15 @@
       <li>Si puede conectarse al remoto, pero planner presenta problemas, seleccione `sin acceso a la app`.</li>
    </ul>
    <div class="container text-end">
-      <button id="close_how_to" class="btn btn-light">Cerrar</button>
+      <button class="btn btn-light" onclick="how_to.close()">
+         Cerrar
+      </button>
    </div>
 </dialog>
 
 <script>
    const how_to = document.querySelector('#how_to');
-   const close_how_to = document.querySelector('#close_how_to');
-
-   close_how_to.onclick = () => {how_to.close();}
-
-   how_to.addEventListener("click", e => {
-      const how_toDim = how_to.getBoundingClientRect();
-      if (
-         e.clientX < how_toDim.left ||
-         e.clientX > how_toDim.right ||
-         e.clientY < how_toDim.top ||
-         e.clientY > how_toDim.bottom
-      ) {how_to.close();}
-   })
+   how_to.addEventListener("click", out_of_modal_close);
 </script>
 <!-- Help modal -->
 
@@ -222,7 +226,9 @@
       </ul>
    </div>
    <div class="container text-end">
-      <button id="closelmo" class="btn btn-light">ok</button>
+      <button class="btn btn-light" onclick="elmo.close()">
+         ok
+      </button>
    </div>
 </dialog>
 
@@ -247,19 +253,7 @@
    }
 
    const elmo = document.querySelector('#elmo');
-   const closelmo = document.querySelector('#closelmo');
-
-   closelmo.onclick = () => {elmo.close();}
-
-   elmo.addEventListener("click", e => {
-      const elmoDim = elmo.getBoundingClientRect();
-      if (
-         e.clientX < elmoDim.left ||
-         e.clientX > elmoDim.right ||
-         e.clientY < elmoDim.top ||
-         e.clientY > elmoDim.bottom
-      ) {elmo.close();}
-   })
+   elmo.addEventListener("click", out_of_modal_close);
 </script>
 <!-- Info modal -->
 
