@@ -107,24 +107,24 @@
       </thead>
       <tbody style="vertical-align: middle;">
          {% for remoto in remotos %}
-            <tr>
-               <td class="py-0">{{remoto[0]}}</td>
-               <td class="py-0 copiable" id="remot-{{remoto[0]}}" onclick="copit(this)">{{remoto[1]}}</td>
-               <td class="py-0 copiable" id="remotip-{{remoto[0]}}" onclick="copit(this)">{{remoto[2]}}</td>
-               <td class="py-0">{{remoto[3]}}</td>
-               <td class="py-0" style="max-width: 6.9em;">
-                  <select class="form-select p-0" id="user-slot-{{remoto[0]}}">
-                     {% for item in lista %}
-                        {% if item == remoto[4] %}
-                           <option class="text-center" selected="{{remoto[4]}}">{{item}}</option>
-                        {% else %}
-                           <option class="text-center">{{item}}</option>
-                        {% endif %}
-                     {% endfor %}
-                  </select>
-               </td>
-               <td class="py-0" id="status-slot-{{remoto[0]}}">{{remoto[5]}}</td>
-            </tr>
+         <tr>
+            <td class="py-0">{{remoto[0]}}</td>
+            <td class="py-0 copiable" id="remot-{{remoto[0]}}" onclick="copit(this)">{{remoto[1]}}</td>
+            <td class="py-0 copiable" id="remotip-{{remoto[0]}}" onclick="copit(this)">{{remoto[2]}}</td>
+            <td class="py-0">{{remoto[3]}}</td>
+            <td class="py-0" style="max-width: 6.9em;">
+               <select class="form-select p-0" id="user-slot-{{remoto[0]}}">
+               {%- for item in lista %}
+                  {% if item == remoto[4] -%}
+                     <option class="text-center" selected="{{remoto[4]}}">{{item}}</option>
+                  {%- else -%}
+                     <option class="text-center">{{item}}</option>
+                  {%- endif %}
+               {%- endfor %}
+               </select>
+            </td>
+            <td class="py-0" id="status-slot-{{remoto[0]}}">{{remoto[5]}}</td>
+         </tr>
          {% endfor %}
       </tbody>
    </table>
